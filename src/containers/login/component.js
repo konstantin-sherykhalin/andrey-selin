@@ -16,9 +16,14 @@ export default class LoginComponent extends React.Component {
 	componentDidMount() {
 	}
 
+	next = () => {
+		this.props.next();
+	}
+
 	render() {
 		let {props,state} = this;
+		console.log(props);
 
-		return (<Layout {...state} />);
+		return (<Layout {...state} next={this.next} />);
 	}
 };

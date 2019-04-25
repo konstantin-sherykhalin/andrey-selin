@@ -23,7 +23,7 @@ EStyleSheet.build({
 });
 
 // Полоска вверху экрана
-StatusBar.setBarStyle('light-content',true);
+StatusBar.setBarStyle('dark-content',true);
 
 export default class Router extends React.Component {
 	constructor(props) {
@@ -52,8 +52,8 @@ export default class Router extends React.Component {
 		return (
 			<Provider store={store}>
 				{this.state.page == 'start'			? (<Empty/>)	: null}
-				{this.state.page == 'login'			? (<Login		set_page={this.set_page} />)	: null}
-				{this.state.page == 'navigator'		? (<Navigator	ref={ref => config.navigator_ref=ref} />) : null}
+				{this.state.page == 'login'			? (<Login		next={_=>this.set_page('navigator')} />)	: null}
+				{this.state.page == 'navigator'		? (<Navigator	ref={ref => config.navigator_ref=ref} />)	: null}
 			</Provider>
 		);
 	}

@@ -11,10 +11,10 @@ const styles = EStyleSheet.create({
 	},
 });
 
-const page_title = '';
+const page_title = 'Login';
 
-export default () => (
+export default (props) => (
 	<View style={styles.container}>
-		<LoginScreen/>
+		<LoginScreen next={props.next} />
 	</View>
 );

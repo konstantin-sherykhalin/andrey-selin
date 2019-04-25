@@ -6,13 +6,13 @@ import ChatViewScreen	from '../screens/chat/view';
 
 export default createStackNavigator(
 	{
-		list : {
+		chat_list: {
 			screen: ChatListScreen,
 			navigationOptions: {
 				title: 'Chats',
 			},
 		},
-		view : {
+		chat_view: {
 			screen: ChatViewScreen,
 			navigationOptions: {
 				title: 'Chat',
@@ -20,6 +20,6 @@ export default createStackNavigator(
 		},
 	},
 	{
-		initialRouteName: 'list',
+		initialRouteName: 'chat_list',
 	}
 );
