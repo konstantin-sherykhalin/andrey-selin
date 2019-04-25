@@ -5,8 +5,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 const styles = EStyleSheet.create({
 	container: {
 		flex: 1,
-		marginTop: StatusBar.currentHeight,
-		backgroundColor: '#fff',
+		backgroundColor: '#e4f0f7',
 	},
 });
 

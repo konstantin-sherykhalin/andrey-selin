@@ -8,7 +8,6 @@ const styles = EStyleSheet.create({
 	container: {
 		flex: 1,
 		paddingTop: Platform.select({ios:24,android:StatusBar.currentHeight}),
-		backgroundColor: '#e4f0f7',
 	},
 	top: {
 		justifyContent: 'center',

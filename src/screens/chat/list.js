@@ -7,7 +7,7 @@ import ChatListScreen	from '../../containers/chat/list';
 const styles = EStyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#fff',
+		backgroundColor: '#e4f0f7',
 	},
 });
 

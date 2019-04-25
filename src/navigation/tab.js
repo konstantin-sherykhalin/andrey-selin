@@ -1,6 +1,8 @@
 import React from 'react';
 import {createAppContainer,createBottomTabNavigator} from 'react-navigation';
 
+import BottomTabs		from '../containers/bottom_tabs';
+
 import DashboardScreen	from '../screens/dashboard';
 import ProfileScreen	from '../screens/profile';
 import SettingsScreen	from '../screens/settings';
@@ -36,5 +38,6 @@ export default createAppContainer(createBottomTabNavigator(
 	},
 	{
 		initialRouteName: 'profile',
+		tabBarComponent: BottomTabs,
 	}
 ));

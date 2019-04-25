@@ -31,7 +31,7 @@ export default class Router extends React.Component {
 
 		this.state = {
 			page: 'start',
-			// page: 'navigator',
+			page: 'navigator',
 		};
 	}
 
@@ -43,7 +43,7 @@ export default class Router extends React.Component {
 
 		// let data = JSON.parse(await AsyncStorage.getItem(config.storage_name)) ?? {};
 		// console.log(data);
-		this.set_page('login');
+		// this.set_page('login');
 	}
 
 	set_page = (page) => this.setState({page});
