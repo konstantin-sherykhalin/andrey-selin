@@ -1,0 +1,41 @@
+{
+	"status": "ok",
+	"data": {
+		"id": "IWFBPAi",
+		"messages": [
+			{
+				"id": "rfh34fh409234jf9rhf9",
+				"text": "One thing",
+				"createdAt": "10.02.2019 20:17",
+				"details": {
+					"from": "af23fa2b022ce24bb",
+					"to": "af23fa2b022ce24bb"
+				}
+			}, {
+				"id": "rfh34fh409234jf9rhf9",
+				"text": "Another thing",
+				"createdAt": "10.02.2019 20:17",
+				"details": {
+					"from": "af23fa2b022ce24bb",
+					"to": "af23fa2b022ce24bb"
+				}
+			}, {
+				"id": "rfh34fh409234jf9rhf9",
+				"text": "How are you",
+				"createdAt": "10.02.2019 20:17",
+				"details": {
+					"from": "af23fa2b022ce24bb",
+					"to": "af23fa2b022ce24bb"
+				}
+			}, {
+				"id": "rfh34fh409234jf9rhf9",
+				"text": "Whazuup",
+				"createdAt": "10.02.2019 20:17",
+				"details": {
+					"from": "af23fa2b022ce24bb",
+					"to": "af23fa2b022ce24bb"
+				}
+			},
+		]
+	}
+}

@@ -1,0 +1,16 @@
+{
+	"status": "ok",
+	"data": {
+		"userPic": {
+			"profile": "http://some.pic"
+		},
+		"firstName": "Иван",
+		"lastName": "Петров",
+		"table": {
+			"one": "12%",
+			"two": "Always",
+			"three": false,
+			"four": true
+		}
+	}
+}

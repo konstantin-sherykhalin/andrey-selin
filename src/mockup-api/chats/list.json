@@ -1,0 +1,19 @@
+{
+	"status": "ok",
+	"data": {
+		"chats": [
+			{
+				"id": "IWFBPAi",
+				"title": "Things"
+			},
+			{
+				"id": "34gbwIW",
+				"title": "Stuff chat"
+			},
+			{
+				"id": "fgjbea3D",
+				"title": "Another one"
+			}
+		]
+	}
+}
