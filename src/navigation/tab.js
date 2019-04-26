@@ -37,7 +37,7 @@ export default createAppContainer(createBottomTabNavigator(
 		},
 	},
 	{
-		initialRouteName: 'profile',
+		initialRouteName: 'chats',
 		tabBarComponent: BottomTabs,
 	}
 ));

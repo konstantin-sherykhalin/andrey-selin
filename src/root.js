@@ -30,7 +30,7 @@ export default class Router extends React.Component {
 		super(props);
 
 		this.state = {
-			page: 'start',
+			// page: 'login',
 			page: 'navigator',
 		};
 	}

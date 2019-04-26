@@ -7,6 +7,7 @@ const styles = EStyleSheet.create({
 	container: {
 		flexDirection: 'row',
 		justifyContent: 'space-around',
+		alignItems: 'center',
 		height: 70,
 		paddingHorizontal: 20,
 		backgroundColor: '#e4f0f7',
@@ -23,7 +24,7 @@ const styles = EStyleSheet.create({
 	},
 	tab_text: {
 		color: '#102841',
-		fontSize: 11,
+		fontSize: 11, fontFamily: 'Helvetica Neue', fontWeight: '300',
 	},
 	tab_selected: {
 		opacity: 1,
