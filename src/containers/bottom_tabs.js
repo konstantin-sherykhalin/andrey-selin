@@ -1,3 +1,5 @@
+// Нижнее меню
+
 import React from 'react';
 import {Image,Text,TouchableWithoutFeedback,View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -37,10 +39,9 @@ const styles = EStyleSheet.create({
 
 export default (props) => {
 	let state = props.navigation.state;
-	console.log(props);
 
 	return (
-		<SafeAreaView>
+		<SafeAreaView style={{backgroundColor:'#e4f0f7'}}>
 		<View style={styles.container}>
 		{state.routes.map((tab,i) => (
 			<TouchableWithoutFeedback key={i} onPress={_=>props.jumpTo(tab.key)}>

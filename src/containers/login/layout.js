@@ -1,21 +1,24 @@
 import React from 'react';
-import {Platform,StatusBar,Image,Text,TextInput,TouchableOpacity,View} from 'react-native';
+import {findNodeHandle,Keyboard,Platform,StatusBar,Image,KeyboardAvoidingView,ScrollView,Text,TextInput,TouchableOpacity,View} from 'react-native';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 import alert from '../../services/alert';
+
+import {request} from '../../redux/user';
 
 import TopBar from '../top_bar';
 
 const styles = EStyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: Platform.select({ios:24,android:StatusBar.currentHeight}),
 	},
 	main: {
 		flex: 1,
 		marginHorizontal: 20,
-		paddingVertical: 0, paddingHorizontal: 30,
-		borderRadius: 42,
+		paddingVertical: 0,
+		borderRadius: 36,
 		backgroundColor: '#fff',
 		shadowOffset: {
 			height: 2,
@@ -26,9 +29,12 @@ const styles = EStyleSheet.create({
 		shadowColor: '#000',
 		elevation: 1,
 	},
+	scroll: {
+		paddingHorizontal: 30,
+	},
 	image_area: {
 		alignItems: 'center',
-		margin: 35,
+		margin: 40,
 	},
 	image: {
 		height: 120, width: 120,
@@ -46,7 +52,8 @@ const styles = EStyleSheet.create({
 	input: {
 		height: 40,
 		marginVertical: 15, paddingHorizontal: 10,
-		borderWidth: 1, borderColor: '#eee',
+		borderWidth: 1, borderColor: '#e7e7e7',
+		borderRadius: 7,
 		fontSize: 14, fontFamily: 'Helvetica Neue', fontWeight: '300',
 	},
 	button: {
@@ -56,16 +63,19 @@ const styles = EStyleSheet.create({
 		borderRadius: 7,
 		backgroundColor: '#5d9cff',
 	},
+	button_disabled: {
+		opacity: 0.5,
+	},
 	button_text: {
 		color: '#fff',
 		fontSize: 14, fontFamily: 'Helvetica Neue', fontWeight: '300',
 	},
 	under: {
-		flex: 1,
 		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	under_text: {
-		paddingBottom: '10%',
+		paddingTop: 10, paddingBottom: 20,
 		color: '#102841',
 		fontSize: 12, fontFamily: 'Helvetica Neue', fontWeight: '300',
 	},
@@ -80,63 +90,111 @@ export default class LoginComponentLayout extends React.Component {
 
 		phone: '',
 		code: '',
+
+		code_id: '',
 	};
 
 	componentDidMount() {
-		this.phone_input.focus();
+		// this.phone_input.focus();
 	}
 
 	change_phone = (phone) => this.setState({phone});
 	change_code  = (code)  => this.setState({code});
 
+	// Запрос кода
 	ask_code = async () => {
-		if(this.state.phone.length) {
+		let state = this.state;
 
-			await this.setState({stage:1});
-			this.code_input.focus();
+		if(!state.phone.length) {
+			await alert("Введите ваш номер телефона");
+			this.phone_input.focus();
+			return;
+		}
+
+		// Показываем следующий экран
+		await this.setState({stage:1});
+		this.code_input.focus();
+
+		let {response,error} = await request.send_code(state.phone);
+		if(response) {
+			await this.setState({code_id:response.code_id});
+		}
+		if(error) {
+			alert("Не удалось совершить запрос","Попробуйте еще раз");
 		}
 	}
+	// Вход
 	login = async () => {
-		if(this.state.code.length) {
+		let state = this.state;
 
-			this.props.next();
+		if(!state.code.length) {
+			await alert("Введите код из смс");
+			this.code_input.focus();
+			return;
 		}
+		Keyboard.dismiss();
+
+		this.props.login({
+			phone:		state.phone,
+			code:		state.code,
+			code_id:	state.code_id,
+		});
 	}
 
 	render() {
 		let {props,state} = this;
 
 		return (
-			<View style={styles.container}>
+			<View style={[styles.container,{paddingTop:getStatusBarHeight()}]}>
 				<TopBar text='Login' />
 				<View style={styles.main}>
-					<View style={styles.image_area}>
-						<Image style={styles.image} />
-					</View>
-					<View style={styles.block}>
-					{state.stage == 0 ? (
-						<>
-						<Text style={styles.tint}>Type your telephone{'\n'}number to login:</Text>
-						<TextInput ref={ref => this.phone_input=ref} style={styles.input} value={state.phone} onChangeText={this.change_phone} />
-						<TouchableOpacity style={styles.button} onPress={this.ask_code}>
-							<Text style={styles.button_text}>Get code</Text>
-						</TouchableOpacity>
-						</>
-					) : state.stage == 1 ? (
-						<>
-						<Text style={styles.tint}>Please enter the code{'\n'}we sent you via sms:</Text>
-						<TextInput ref={ref => this.code_input=ref} style={styles.input} value={state.code} onChangeText={this.change_code} />
-						<TouchableOpacity style={styles.button} onPress={this.login}>
-							<Text style={styles.button_text}>Login</Text>
-						</TouchableOpacity>
-						</>
-					) : null}
-					</View>
-					<View style={styles.under}>
-						<Text style={styles.under_text}>(c) Bla bla bla</Text>
-					</View>
+					<KeyboardAwareScrollView
+						innerRef={ref => this.scroll=ref}
+						contentContainerStyle={[styles.scroll,state.keyboard ? {} :{minHeight:'100%'}]}
+						keyboardDismissMode='on-drag'
+						keyboardShouldPersistTaps='always'
+						enableOnAndroid={true}
+						extraScrollHeight={50}
+					>
+						<View style={styles.image_area}>
+							<Image style={styles.image} />
+						</View>
+						<View style={styles.block}>
+						{state.stage == 0 ? (
+							<>
+							<Text style={styles.tint}>Type your telephone{'\n'}number to login:</Text>
+							<TextInput
+								ref={ref => this.phone_input=ref}
+								style={styles.input}
+								value={state.phone}
+								keyboardType='phone-pad'
+								onChangeText={this.change_phone}
+							/>
+							<TouchableOpacity style={styles.button} onPress={this.ask_code}>
+								<Text style={styles.button_text}>Get code</Text>
+							</TouchableOpacity>
+							</>
+						) : state.stage == 1 ? (
+							<>
+							<Text style={styles.tint}>Please enter the code{'\n'}we sent you via sms:</Text>
+							<TextInput
+								ref={ref => this.code_input=ref}
+								style={styles.input}
+								value={state.code}
+								onChangeText={this.change_code}
+							/>
+							<TouchableOpacity style={styles.button} onPress={this.login}>
+								<Text style={styles.button_text}>Login</Text>
+							</TouchableOpacity>
+							</>
+						) : null}
+						</View>
+						<View style={[styles.under,{flex:1}]}>
+							<Text style={styles.under_text}>(c) Bla bla bla</Text>
+						</View>
+					</KeyboardAwareScrollView>
 				</View>
-				<View style={styles.bottom} />
+				<View style={{height:70}} />
 			</View>
 		);
 	}

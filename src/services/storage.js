@@ -11,7 +11,9 @@ export default new function() {
 	var ready = AsyncStorage.getItem(storage_name);
 	ready.then(async data => {
 		if((data === null)) {
-			st = {};
+			st = {
+				user: {},
+			};
 			await AsyncStorage.setItem(storage_name,JSON.stringify(st));
 		} else {
 			st = JSON.parse(data);

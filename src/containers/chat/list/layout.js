@@ -3,23 +3,28 @@ import {Platform,StatusBar,FlatList,Image,ScrollView,Switch,Text,TouchableOpacit
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {withNavigation} from 'react-navigation';
 
+import TopBar from '../../top_bar';
+
 const styles = EStyleSheet.create({
 	container: {
 		flex: 1,
-		marginHorizontal: 20,
+	},
+	main: {
+		flex: 1,
+		marginBottom: 20, marginHorizontal: 20,
 		borderRadius: 42,
 		backgroundColor: '#fff',
-		// shadowOffset: {
-		// 	height: 2,
-		// 	width: 0
-		// },
-		// shadowRadius: 20,
-		// shadowOpacity: 0.25,
-		// shadowColor: '#000',
-		// elevation: 1,
+		shadowOffset: {
+			height: 2,
+			width: 0
+		},
+		shadowRadius: 20,
+		shadowOpacity: 0.25,
+		shadowColor: '#000',
+		elevation: 1,
 	},
 	list: {
-		padding: 30,
+		margin: 30,
 	},
 	item: {
 		alignItems: 'center',
@@ -45,31 +50,28 @@ export default class ChatListComponentLayout extends React.Component {
 	render() {
 		let {props,state} = this;
 
-		let list = [
-			{id:1,text:'Things'},
-			{id:2,text:'Stuff chat'},
-			{id:3,text:'Another one'},
-		];
-
 		return (
 			<View style={styles.container}>
-				<FlatList
-					style={styles.list}
-					data={list}
-					renderItem={({item}) => <Item {...item} />}
-					ItemSeparatorComponent={Separator}
-					keyExtractor={item => item.id+''}
-					// onRefresh={this.props.reload}
-					// refreshing={this.props.loading}
-				/>
+				<TopBar text="Chats" />
+				<View style={styles.main}>
+					<FlatList
+						style={styles.list}
+						data={props.data}
+						renderItem={({item}) => <Item {...item} />}
+						ItemSeparatorComponent={Separator}
+						keyExtractor={item => item.id+''}
+						onRefresh={this.props.reload}
+						refreshing={this.props.loading}
+					/>
+				</View>
 			</View>
 		);
 	}
 };
 
 const Item = withNavigation((props) => (
-	<TouchableOpacity style={styles.item} onPress={_=>props.navigation.push('chat_view')}>
-		<Text style={styles.item_text}>{props.text}</Text>
+	<TouchableOpacity style={styles.item} onPress={_=>props.navigation.push('chat_view',{id:props.id,title:props.title})}>
+		<Text style={styles.item_text}>{props.title}</Text>
 	</TouchableOpacity>
 ));
 

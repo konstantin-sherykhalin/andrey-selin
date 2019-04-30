@@ -1,5 +1,6 @@
 import React from 'react';
-import {Platform,StatusBar,Image,ScrollView,Switch,Text,TouchableOpacity,View} from 'react-native';
+import {Platform,StatusBar,ActivityIndicator,Image,ScrollView,Switch,Text,TouchableOpacity,View} from 'react-native';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import alert	from '../../services/alert';
@@ -9,12 +10,11 @@ import TopBar from '../top_bar';
 const styles = EStyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: Platform.select({ios:24,android:StatusBar.currentHeight}),
 	},
-	scroll: {
+	main: {
 		flex: 1,
-		marginHorizontal: 20,
-		borderRadius: 42,
+		marginBottom: 20, marginHorizontal: 20,
+		borderRadius: 36,
 		backgroundColor: '#fff',
 		shadowOffset: {
 			height: 2,
@@ -25,7 +25,13 @@ const styles = EStyleSheet.create({
 		shadowColor: '#000',
 		elevation: 1,
 	},
-	main: {
+	loading: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	scroll: {
+		minHeight: '100%',
 		padding: 30,
 	},
 	image_area: {
@@ -33,9 +39,12 @@ const styles = EStyleSheet.create({
 		marginBottom: 35,
 	},
 	image: {
-		height: 120, width: 120,
+		height: 140, width: 140,
 		borderWidth: 1, borderColor: '#d8d8d8',
-		borderRadius: 60,
+		borderRadius: 70,
+	},
+	block: {
+		flex: 1,
 	},
 	name: {
 		color: '#102841',
@@ -43,7 +52,7 @@ const styles = EStyleSheet.create({
 		textAlign: 'center',
 	},
 	table: {
-		marginVertical: 30,
+		marginVertical: 25,
 	},
 	table_row: {
 		flexDirection: 'row',
@@ -77,63 +86,79 @@ const styles = EStyleSheet.create({
 });
 
 export default class ProfileComponentLayout extends React.Component {
-	state = {
-	};
+	constructor(props) {
+		super(props);
 
-	componentDidMount() {
+		this.state = {
+			...props.data,
+		};
+	}
+
+	componentDidUpdate(prev_props) {
+		if(!Object.is(prev_props,this.props)) {
+			this.setState(this.props.data);
+		}
 	}
 
 	render() {
 		let {props,state} = this;
 
 		return (
-			<View style={styles.container}>
+			<View style={[styles.container,{paddingTop:getStatusBarHeight()}]}>
 				<TopBar text='My profile' />
-				<ScrollView style={styles.scroll}>
-					<View style={styles.main}>
-						<View style={styles.image_area}>
-							<Image style={styles.image} />
-						</View>
-						<Text style={styles.name}>Ivan Petrov</Text>
-						<View style={styles.table}>
-							<View style={styles.table_row}>
-								<View style={styles.table_row_left}>
-									<Text style={styles.table_text}>Table row 1</Text>
-								</View>
-								<View style={styles.table_row_right}>
-									<Text style={styles.table_text}>12%</Text>
-								</View>
-							</View>
-							<View style={styles.table_row}>
-								<View style={styles.table_row_left}>
-									<Text style={styles.table_text}>Another table row</Text>
-								</View>
-								<View style={styles.table_row_right}>
-									<Text style={styles.table_text}>Always</Text>
-								</View>
-							</View>
-							<View style={styles.table_row}>
-								<View style={styles.table_row_left}>
-									<Text style={styles.table_text}>Something</Text>
-								</View>
-								<View style={styles.table_row_right}>
-									<Switch value={true} />
-								</View>
-							</View>
-							<View style={styles.table_row}>
-								<View style={styles.table_row_left}>
-									<Text style={styles.table_text}>Another thing</Text>
-								</View>
-								<View style={styles.table_row_right}>
-									<Switch />
-								</View>
-							</View>
-						</View>
-						<TouchableOpacity style={styles.button} onPress={this.save}>
-							<Text style={styles.button_text}>Save</Text>
-						</TouchableOpacity>
+				<View style={styles.main}>
+				{props.loading ? (
+					<View style={styles.loading}>
+						<ActivityIndicator size='large' />
 					</View>
-				</ScrollView>
+				) : (
+					<ScrollView ref={ref => this.scroll=ref} contentContainerStyle={styles.scroll}>
+						<View style={styles.image_area}>
+							<Image style={styles.image} source={{url:state.image_url}} />
+						</View>
+						<View style={styles.block}>
+							<Text style={styles.name}>{state.name+' '+state.family}</Text>
+							<View style={styles.table}>
+								<View style={styles.table_row}>
+									<View style={styles.table_row_left}>
+										<Text style={styles.table_text}>Table row 1</Text>
+									</View>
+									<View style={styles.table_row_right}>
+										<Text style={styles.table_text}>{state.data.one}</Text>
+									</View>
+								</View>
+								<View style={styles.table_row}>
+									<View style={styles.table_row_left}>
+										<Text style={styles.table_text}>Another table row</Text>
+									</View>
+									<View style={styles.table_row_right}>
+										<Text style={styles.table_text}>{state.data.two}</Text>
+									</View>
+								</View>
+								<View style={styles.table_row}>
+									<View style={styles.table_row_left}>
+										<Text style={styles.table_text}>Something</Text>
+									</View>
+									<View style={styles.table_row_right}>
+										<Switch value={state.data.three} onValueChange={value => this.setState(state => ({data:{...state.data,three:value}}))} />
+									</View>
+								</View>
+								<View style={[styles.table_row,{borderBottomWidth:0}]}>
+									<View style={styles.table_row_left}>
+										<Text style={styles.table_text}>Another thing</Text>
+									</View>
+									<View style={styles.table_row_right}>
+										<Switch value={state.data.four} onValueChange={value => this.setState(state => ({data:{...state.data,four:value}}))} />
+									</View>
+								</View>
+							</View>
+							<TouchableOpacity style={styles.button} onPress={this.save}>
+								<Text style={styles.button_text}>Save</Text>
+							</TouchableOpacity>
+						</View>
+					</ScrollView>
+				)}
+				</View>
 			</View>
 		);
 	}

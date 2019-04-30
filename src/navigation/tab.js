@@ -1,3 +1,5 @@
+// Нижний навигатор
+
 import React from 'react';
 import {createAppContainer,createBottomTabNavigator} from 'react-navigation';
 
@@ -37,7 +39,7 @@ export default createAppContainer(createBottomTabNavigator(
 		},
 	},
 	{
-		initialRouteName: 'chats',
+		initialRouteName: 'profile',
 		tabBarComponent: BottomTabs,
 	}
 ));

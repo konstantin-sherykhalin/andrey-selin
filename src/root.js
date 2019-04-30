@@ -10,6 +10,8 @@ import {Provider}				from 'react-redux';
 
 import config					from './config';
 
+import Smoke					from './containers/smoke';
+
 import Empty					from './screens/empty';
 import Login					from './screens/login';
 
@@ -30,8 +32,8 @@ export default class Router extends React.Component {
 		super(props);
 
 		this.state = {
-			// page: 'login',
-			page: 'navigator',
+			page: 'login',
+			// page: 'navigator',
 		};
 	}
 
@@ -54,6 +56,7 @@ export default class Router extends React.Component {
 				{this.state.page == 'start'			? (<Empty/>)	: null}
 				{this.state.page == 'login'			? (<Login		next={_=>this.set_page('navigator')} />)	: null}
 				{this.state.page == 'navigator'		? (<Navigator	ref={ref => config.navigator_ref=ref} />)	: null}
+				<Smoke/>
 			</Provider>
 		);
 	}
